@@ -7,4 +7,4 @@ class ScalableFigure(Turtle):       #### Inherit behavior from Turtle
 
     def __init__(self, position, heading, scale, fill=blue, **style):
         Turtle.__init__(self, position, heading, fill=fill, **style)
-        self.scale = scale * 100
+        self.scale = scale * 100 #default scaling is 100

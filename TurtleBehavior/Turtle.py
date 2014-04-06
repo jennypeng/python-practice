@@ -8,6 +8,7 @@ class Turtle:
                        outline=black, fill=white, width=1):
         self.position, self.heading = position, heading
         self.style = dict(outline=outline, fill=fill, width=width)
+        self.scale = 100 # scaling factor is 100
 
     def getshape(self):
         """Return a list of vectors giving the polygon for this turtle."""
