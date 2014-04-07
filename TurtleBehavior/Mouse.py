@@ -23,7 +23,7 @@ class Mouse(Turtle):       #### Inherit behavior from Turtle
         radius = self.orbit.radius # the radius of the circle
         mouse_x = self.position.x - center.x # mouse x relative to orbit center
         mouse_y = self.position.y - center.y # mouse y relative to orbit center
-        rad_change = self.speed * pi/180 # mouse is moving by this many radians
+        rad_change = self.scale * self.speed * pi/180 # mouse is moving by this many radians
         # (s,t) = (u,v) where u = scos(0) + tsin(0), v = -ssin(0) + tcos(0)
         new_x = mouse_x * math.cos(rad_change) + mouse_y * math.sin(rad_change)
         new_y = -mouse_x * math.sin(rad_change) + mouse_y * math.cos(rad_change)

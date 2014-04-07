@@ -54,7 +54,8 @@ def initializeMouse(orbit, offset, speed):
 	>>> print(str(mouse.orbit.position.x))
 	200.0
 	"""
-	deg = randrange(0, 360, 1) # create a random degree for mouse to start orbit at
+	deg = 396
+	#deg = randrange(0, 360, 1) # create a random degree for mouse to start orbit at
 	mouse_start = unit(orbit.heading + deg) # what degree to initialize mouse
 	mouse = Mouse(orbit.position + mouse_start * (orbit.radius + offset) * orbit.scale, speed = speed, orbit = orbit, debug_flag = True, degree = deg)
 	arena.add(mouse)
@@ -71,8 +72,10 @@ def initializeCat(mouse, statue, speed):
 	>>> print(str(cat.orbit.position.x))
 	200.0
 	"""
-	cat_rad = uniform(0, 8.1) # the cat starts at a random radius
-	cat_deg = randrange(0, 360, 1) # the cat starts at a random degree
+	cat_rad = 0 # should be one less than test
+	#cat_rad = uniform(0, 8.1) # the cat starts at a random radius
+	#cat_deg = randrange(0, 360, 1) # the cat starts at a random degree
+	cat_deg = 35
 	cat_start = unit(statue.heading + cat_deg)
 	cat = Cat(statue.position + cat_start * (statue.radius + cat_rad) * statue.scale, speed = speed, orbit = statue, mouse = mouse, arena = arena, radius = statue.radius + cat_rad, debug_flag = True, degree = cat_deg)
 	arena.add(cat)
