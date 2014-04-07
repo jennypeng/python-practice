@@ -8,7 +8,7 @@ class Turtle:
                        outline=black, fill=white, width=1):
         self.position, self.heading = position, heading
         self.style = dict(outline=outline, fill=fill, width=width)
-        self.scale = 100 # scaling factor is 100
+        self.scale = 30 # scaling factor is 30
 
     def getshape(self):
         """Return a list of vectors giving the polygon for this turtle."""
@@ -18,11 +18,6 @@ class Turtle:
                 self.position - forward*8 - right*8,
                 self.position - forward*5,
                 self.position - forward*8 + right*8]
-        '''SQUARE'''
-        #return [self.position + forward*15,
-        #		self.position + forward*15 + right*15,
-        #		self.position + right*15,
-        #		self.position]
 
     def getnextstate(self):
         """Determine the turtle's next step and return its new state."""

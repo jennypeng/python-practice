@@ -15,7 +15,7 @@ from Circle  import Circle             # Import our Turtle
 from Mouse import Mouse
 from Cat import Cat
 from Vector  import *                  # Import everything from our Vector
-from random import randrange
+from random import randrange, uniform
 
 tk = Tk()                              # Create a Tk top-level widget
 arena = Arena(tk, width = 1000, height = 700)                      # Create an Arena widget, arena
@@ -33,6 +33,13 @@ def initializeStatue(center_x, center_y, radius):
 	Creates a circular statue centered at CENTER_X and CENTER_Y 
 	with a radius of RADIUS.
 	Returns the statue
+	>>> statue = initializeStatue(200, 200, 2)
+	>>> print(str(statue.radius))
+	2
+	>>> print(str(statue.scale))
+	30
+	>>> print(str(statue.position.x))
+	200.0
 	"""
 	statue = Circle(Vector(center_x, center_y), 0, radius = radius)
 	arena.add(statue)
@@ -42,6 +49,10 @@ def initializeMouse(orbit, offset, speed):
 	"""
 	Creates a mouse which runs around ORBIT, with an OFFSET.
 	Returns the mouse.
+	>>> statue = initializeStatue(200, 200, 2)
+	>>> mouse = initializeMouse(statue, 0, 1)
+	>>> print(str(mouse.orbit.position.x))
+	200.0
 	"""
 	deg = randrange(0, 360, 1) # create a random degree for mouse to start orbit at
 	mouse_start = unit(orbit.heading + deg) # what degree to initialize mouse
@@ -50,13 +61,23 @@ def initializeMouse(orbit, offset, speed):
 	return mouse
 
 def initializeCat(mouse, statue, speed):
-	cat_rad = 1.9
-	#cat_rad = randrange(0, 5, 1) # the cat starts at a random radius
+	"""
+	Creates a cat to follow MOUSE around STATUE with speed of SPEED.
+	>>> statue = initializeStatue(200, 200, 2)
+	>>> mouse = initializeMouse(statue, 0, 1)
+	>>> cat = initializeCat(mouse, statue, 1)
+	>>> print(str(cat.moved))
+	-1
+	>>> print(str(cat.orbit.position.x))
+	200.0
+	"""
+	cat_rad = uniform(0, 8.1) # the cat starts at a random radius
 	cat_deg = randrange(0, 360, 1) # the cat starts at a random degree
 	cat_start = unit(statue.heading + cat_deg)
 	cat = Cat(statue.position + cat_start * (statue.radius + cat_rad) * statue.scale, speed = speed, orbit = statue, mouse = mouse, arena = arena, radius = statue.radius + cat_rad, debug_flag = True, degree = cat_deg)
 	arena.add(cat)
 	return cat
+
 statue = initializeStatue(500, 350, 1.0)
 mouse = initializeMouse(statue, 0, 1)
 cat = initializeCat(mouse, statue, 1)

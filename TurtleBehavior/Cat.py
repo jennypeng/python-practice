@@ -2,6 +2,11 @@ from Turtle import Turtle
 from Vector import *
 from Color import *
 import math
+import doctest
+from Circle  import Circle
+from Mouse import Mouse
+from Tkinter import *                  # Import everything from Tkinter
+from Arena   import Arena
 class Cat(Turtle):       #### Inherit behavior from Turtle
     """The cat walks in a straight line forever."""
 
@@ -10,58 +15,59 @@ class Cat(Turtle):       #### Inherit behavior from Turtle
         Turtle.__init__(self, position, heading, fill=fill, **style)
         self.speed = speed
         self.orbit = orbit
-        self.degree = degree # the degree of location of mouse relative to orbit
+        self.degree = degree # the degree of location of cat relative to orbit
         self.debug = debug_flag
         self.mouse = mouse
         self.cat_rad = radius + self.orbit.radius
         self.moved = -1
         self.arena = arena
 
-    def getAngle(self):
-        """ Returns the angle of the cat relative to the statue. EX left = 270"""
-        return (self.position - self.orbit.position).direction()
+    def getAngle(self, debug = False):
+        """ Returns the angle of the cat relative to the statue. EX left = 270
+        >>> test_cat.getAngle(True)
+        Angle is 270
+        """
+        angle = (self.position - self.orbit.position).direction()
+        if debug:
+            print("Angle is " + str(angle))
+        return angle
 
-    def reachedCircle(self):
-        """ Returns whether the cat has reached the circle or not. """
-        print("cat has radius of " + str(self.cat_rad))
-        #print("orbit is " + str(self.orbit.radius))
-        return float(self.cat_rad) <= float(self.orbit.radius)
+    def reachedCircle(self, debug = False):
+        """ Returns whether the cat has reached the circle or not. 
+        >>> test_cat.reachedCircle(True)
+        Cat has not reached the circle.
+        """
+        
+        reached = float(self.cat_rad) <= float(self.orbit.radius)
+        if debug and reached:
+            print("Cat has reached the circle.")
+        return reached
     
-    def caughtMouse(self):
+    def caughtMouse(self, debug = False):
         """ Returns whether the cat has caught the mouse. """
-        #print("cat angle is " + str(float(self.getAngle())))
-        #print("mouse angle is " + str(float(self.mouse.getAngle())))
         same_angle = float(self.getAngle()) <= float(self.mouse.getAngle() + 5) and float(self.getAngle()) >= float(self.mouse.getAngle() - 5)
-        #print("same angle? " + str(same_angle))
-        #print("reached circle?" + str(float(self.cat_rad) <= float(self.orbit.radius)))
         return same_angle and self.reachedCircle()
 
     def getnextstate(self):
         """Advance straight ahead."""
         sees_mouse = 1.0 <= self.cat_rad * math.cos((self.getAngle() - self.mouse.getAngle()) * pi/180) #does cat see mouse
-        #print("cat sees: " + str(sees_mouse))
         center = self.orbit.position # the center of the circle
         radius = self.orbit.radius # the radius of the circle
         if self.caughtMouse():
             self.arena.stop()
             print("Mouse caught.")
-        if self.moved == -1 and sees_mouse:
-            #print("the cat has seen the cat")
+        if self.moved == -1 and sees_mouse: # the cat sees the mouse
             self.moved = 0
             self.heading = (self.position - center).direction() - 180
-        if self.moved >= 0:
-            #print("currently moving")
+        if self.moved >= 0: # the cat is currently moving
             self.moved += 1
-            if self.moved == self.scale:
-                #print("reached end of move")
+            if self.moved == self.scale: # has the cat moved one meter yet?
                 self.moved = -1
-            #print ("moved is " + str(self.moved))
             new_pos = self.position + unit(self.heading)*self.speed
-            self.cat_rad = (self.orbit.position - new_pos).length()/self.scale
-            if self.reachedCircle():
+            self.cat_rad = (self.orbit.position - new_pos).length()/self.scale # adjust the new cat radius
+            if self.reachedCircle(): # if the cat has reached the circle
                 self.moved == -1
                 return self.position, self.heading # the cat stays still if reached circle
-            #print("cat rad is " + str(self.cat_rad)) # cat's radius from center
             else:
                 return new_pos, self.heading
         if not sees_mouse and self.moved == -1: # if cat sees the mouse it moves one meter toward statue, else 1.25 counter clockwise
@@ -76,15 +82,7 @@ class Cat(Turtle):       #### Inherit behavior from Turtle
             self.position = Vector(center.x + new_x, center.y + new_y)
             self.heading = (self.position - center).direction() - 90 #ex: if mouse relative 270, then should be facing 180
             return self.position, self.heading
-        # else:
-        #     self.heading = (self.position - center).direction() - 180 
-        #     new_pos = self.position + unit(self.heading)*self.speed, self.heading
-        #     #self.cat_rad = math.hypot(new_pos[0].x - center.x, new_pos[1].y - center.y) - center.radius # find distance between circle outline and cat 
-        #     return new_pos
-        # self.heading = (self.position - center).direction() - 180 
-        # new_pos = self.position + unit(self.heading)*self.speed, self.heading
-        #     #self.cat_rad = math.hypot(new_pos[0].x - center.x, new_pos[1].y - center.y) - center.radius # find distance between circle outline and cat 
-        # return new_pos
+
     def getshape(self):
         """Return a list of vectors giving the polygon for this turtle."""
         forward = unit(self.heading)
@@ -93,6 +91,26 @@ class Cat(Turtle):       #### Inherit behavior from Turtle
                 self.position - forward*16 - right*16,
                 self.position - forward*10,
                 self.position - forward*16 + right*16]
+# def setUpTest(cat_angle, mouse_angle, cat_radius):
+#     """ Sets up testing environment for program, using cat_angle, mouse_angle, and cat_radius."""
+#     tk = Tk()                              # Create a Tk top-level widget
+#     arena = Arena(tk, width = 1000, height = 700)                      # Create an Arena widget, arena
+#     arena.pack() 
+#     statue = Circle(Vector(200, 200), 0, radius = 1)
+#     mouse = Mouse(statue.position + unit(statue.heading + mouse_angle) * statue.radius * statue.scale, speed = 1, orbit = statue, debug_flag = True, degree = mouse_angle)
+#     cat = Cat(statue.position + unit(statue.heading + cat_angle) * (statue.radius + cat_radius) * statue.scale, speed = 1, orbit = statue, mouse = mouse, arena = arena, radius = statue.radius + cat_radius, debug_flag = True, degree = cat_angle)
+#     doctest.testmod(extraglobs={'test_statue': statue, 'test_mouse': mouse, 'test_cat': cat})
+
+    
+if __name__ == "__main__":
+    tk = Tk()                              # Create a Tk top-level widget
+    arena = Arena(tk, width = 1000, height = 700)                      # Create an Arena widget, arena
+    arena.pack() 
+    statue = Circle(Vector(200, 200), 0, radius = 1)
+    mouse = Mouse(statue.position + mouse_start * statue.radius * statue.scale, speed = 1, orbit = statue, debug_flag = True, degree = 0)
+    cat = Cat(statue.position + unit(statue.heading + 270) * (statue.radius + 1) * statue.scale, speed = 1, orbit = statue, mouse = mouse, arena = arena, radius = statue.radius + 1, debug_flag = True, degree = 270)
+    doctest.testmod(extraglobs={'test_statue': statue, 'test_mouse': mouse, 'test_cat': cat})
+
 
     
 
