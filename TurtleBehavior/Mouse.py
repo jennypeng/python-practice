@@ -12,12 +12,15 @@ class Mouse(Turtle):       #### Inherit behavior from Turtle
         self.orbit = orbit
         self.degree = degree # the degree of location of mouse relative to orbit
         self.debug = debug_flag
+    
+    def getAngle(self):
+        """ Returns the angle of the mouse relative to the statue. EX left = 270"""
+        return (self.position - self.orbit.position).direction()
 
     def getnextstate(self):
         """Advance straight ahead."""
         center = self.orbit.position # the center of the circle
         radius = self.orbit.radius # the radius of the circle
-        mouse_angle = (self.position - center).direction() # the angle of the mouse relative to the statue ex left = 270 deg
         mouse_x = self.position.x - center.x # mouse x relative to orbit center
         mouse_y = self.position.y - center.y # mouse y relative to orbit center
         rad_change = self.speed * pi/180 # mouse is moving by this many radians
