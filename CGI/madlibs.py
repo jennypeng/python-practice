@@ -19,9 +19,10 @@ class Sentence():
 
 sentences = [
 	Sentence([ADJ, ADJ, NOUN], "The %s alien examined the %s %s hungrily."),
-	Sentence([ADJ, ADJ, NOUN], "The %s alien examined the %s %s hungrily."),
-	Sentence([ADJ, ADJ, NOUN], "The %s alien examined the %s %s hungrily."),
-	Sentence([ADJ, ADJ, NOUN], "The %s alien examined the %s %s hungrily."),
+	Sentence([NOUN, VERB, ADJ, NOUN], "The %s %s the %s %s."),
+	Sentence([ADV, VERB, NOUN], "She %s %s her %s."),
+	Sentence([ADJ, NOUN, ADJ, NOUN], "The %s %s cleaned the %s %s."),
+	Sentence([NOUN, ADJ, NOUN], "The %s played games with the %s %s.")
 ]
 
 
@@ -58,7 +59,7 @@ class View(object):
 		print
 		print '<form action="madlibs.cgi">'
 		print '<h1> Welcome to MadLibs! </h1>'
-		sentence = sentences[sentence_id] # sentence.template, sentence.blanks is what needs to be filled in
+		sentence = sentences[sentence_id ] # sentence.template, sentence.blanks is what needs to be filled in
 		blanks = sentence.blanks
 		for i in xrange(len(blanks)):
 			blank = blanks[i]
