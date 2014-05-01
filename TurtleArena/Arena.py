@@ -34,11 +34,13 @@ class Arena(Frame):
         Label(self, textvariable=self.cat_ang).pack(side=LEFT)
         #mouse angle
         Label(self, textvariable=self.mouse_ang).pack(side=LEFT)
+        self.listbox = Listbox(self, selectmode=SINGLE)
+        self.listbox.pack(side=LEFT)
+        self.colors = {0: red, 1:yellow, 2:green, 3:purple}
+        for item in self.colors.values():
+            self.listbox.insert(END, item)
         # create menu
-        var = IntVar()
-
-        c = Checkbutton(master, text="Expand", variable=var)
-        c.pack()
+        
         menubar = Menu(self)
         filemenu = Menu(menubar, tearoff=0)
         #menubar.add_command(label='File') # when selected shows About... and Quit 
@@ -85,7 +87,12 @@ class Arena(Frame):
 
     def motion(self, event):
         print("motion happening")
+        print("whatis gaegawe" + str(self.listbox.curselection()[0]))
+        color = int(self.listbox.curselection()[0])
+        print("color is " + str(color))
         cat = self.turtles[2]
+        cat.style['fill'] = self.colors[color]
+        self.update(cat)
         statue = self.turtles[1]
         drag = Vector(event.x, event.y)
         print(str(event.x) + " " + str(event.y))
@@ -93,7 +100,7 @@ class Arena(Frame):
         if (drag - cat.position).length() < 10:
             cat.style['fill'] = black
         else:
-            cat.style['fill'] = yellow
+            cat.style['fill'] = self.colors[color]
         self.update(cat)
         if self.dragging:
             self.dragging.position = self.start + drag - self.dragstart
