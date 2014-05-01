@@ -66,8 +66,11 @@ class Arena(Frame):
         about_message = ""
         msg = Message(top, text=about_message)
         msg.pack()
-        photo = PhotoImage(file="turtle.gif")
-        pic = Label(top, image=photo).pack(side=TOP)
+        
+        photo = PhotoImage(file="test.gif")
+        pic = Label(top, image=photo).pack()
+        pic.hello = photo
+
         Label(top, text='Turtle Arena - Jenny').pack(side=TOP)
 
         button = Button(top, text="Okay", command=top.destroy)
@@ -86,22 +89,28 @@ class Arena(Frame):
                 return
 
     def motion(self, event):
-        print("motion happening")
-        print("whatis gaegawe" + str(self.listbox.curselection()[0]))
-        color = int(self.listbox.curselection()[0])
-        print("color is " + str(color))
         cat = self.turtles[2]
-        cat.style['fill'] = self.colors[color]
-        self.update(cat)
+        try:
+            color = int(self.listbox.curselection()[0])
+            cat.style['fill'] = self.colors[color]
+            self.update(cat)
+        except IndexError:
+            pass
         statue = self.turtles[1]
         drag = Vector(event.x, event.y)
         print(str(event.x) + " " + str(event.y))
         print("cat" + str(cat.position.x) + " " + str(cat.position.y))
         if (drag - cat.position).length() < 10:
             cat.style['fill'] = black
+            self.update(cat)
         else:
-            cat.style['fill'] = self.colors[color]
-        self.update(cat)
+            try:
+                color = color = int(self.listbox.curselection()[0])
+                cat.style['fill'] = self.colors[color]
+                self.update(cat)
+            except IndexError:
+                cat.style['fill'] = yellow
+                self.update(cat)
         if self.dragging:
             self.dragging.position = self.start + drag - self.dragstart
             cat.position = self.dragging.position
