@@ -22,7 +22,9 @@ class Cat(Turtle):       #### Inherit behavior from Turtle
         self.moved = -1  # state represents wheter mouse is seen
         self.arena = arena
         self.iter = 0
-
+    def getRadius(self):
+        return self.cat_rad
+        
     def getAngle(self, debug = False):
         """ Returns the angle of the cat relative to the statue. EX left = 270
         >>> test_cat.getAngle(True)

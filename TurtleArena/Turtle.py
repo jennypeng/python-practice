@@ -9,6 +9,8 @@ class Turtle:
         self.position, self.heading = position, heading
         self.style = dict(outline=outline, fill=fill, width=width)
         self.scale = 30 # scaling factor is 30
+        self.first_pos = position
+        self.first_head = heading
 
     def getshape(self):
         """Return a list of vectors giving the polygon for this turtle."""
@@ -26,3 +28,5 @@ class Turtle:
     def setstate(self, state):
         """Update the state of the turtle."""
         self.position, self.heading = state
+    def getfirststate(self):
+        return self.first_pos, self.first_head
